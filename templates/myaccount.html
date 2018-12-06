@@ -1,0 +1,11 @@
+ 
+{% extends 'main.html' %}
+  {% block content %}
+
+  <div class="container text-center">
+    <h3>Welcome {{session.get('username')}} !</h3>
+    <img src="{{session.get('picture')}}" class="rounded-circle img-fluid d-block mx-auto" alt="user_image" width="350" height="350">
+    <h3>{{session.get('email')}}</h3>
+  </div>
+
+   {% endblock content %}

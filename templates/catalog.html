@@ -1,0 +1,17 @@
+{% extends 'main.html' %}
+  {% block content %}
+        {% for category in categories %}
+
+    <div class="col-lg-4 col-sm-6 text-center mb-4">
+        <img class="rounded-circle img-fluid d-block mx-auto" height= 200 width = 200 src="{{url_for('static',filename= 'image/category/'+ category.image)}}" alt="{{category.name}}">
+        <h3>{{category.name}}
+        </h3>
+        <a href="{{url_for('showItems',category_name = category.name)}}" class="btn btn-primary">View Items</a>
+        {% if session.get('username') %}
+         <a href="{{url_for('newItem',category_name = category.name)}}" class="btn btn-primary">Add Item</a>
+        {% endif %}
+    </div>
+
+       {% endfor %}
+        <!-- /.col-md-4 -->
+ {% endblock content %}

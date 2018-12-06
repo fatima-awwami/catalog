@@ -1,0 +1,23 @@
+ {% extends 'main.html' %}
+  {% block content %}
+      
+    <div class="col-lg-4 col-sm-6 text-center mb-4">
+        <img class="rounded-circle img-fluid d-block mx-auto" height= 200 width = 200 src="{{url_for('static',filename= 'image/'+item.image)}}" alt="{{item.title}}">
+        <h3>{{item.title}}</h3>
+        <h4>{{category_name}}</h4>
+        <p>${{item.price}}</p>
+        <p>{{item.description}}</p>
+      {% if session.get('username') %} 
+        {% if session.get('user_id') == item.user_id %}
+             <a href="{{url_for('editItem',category_name=category_name,item_title=item.title)}}" class="btn btn-primary Active">Edit</a>
+             <a href="{{url_for('deleteItem',category_name=category_name,item_title=item.title)}}" class="btn btn-primary Active">Delete</a>
+          {% else %}
+             <a href="{{url_for('editItem',category_name=category_name,item_title=item.title)}}" class="btn btn-primary disabled">Edit</a>
+             <a href="{{url_for('deleteItem',category_name=category_name,item_title=item.title)}}" class="btn btn-primary disabled">Delete</a>
+            {% endif %}
+    {% endif %}
+
+    </div>
+
+        <!-- /.col-md-4 -->
+ {% endblock content %}

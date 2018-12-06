@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!-- saved from url=(0066)https://blackrockdigital.github.io/startbootstrap-small-business/# -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Item Catalog Application</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href= "{{url_for('static',filename= 'css/bootstrap.min.css')}}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{{url_for('static',filename= 'css/styles.css')}}" rel="stylesheet">
+
+    {% if title %}
+        <title> Catalog Application - {{ title }}</title>
+    {% else %}
+        <title>Catalog Application</title>
+    {% endif %}
+
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="{{url_for('showCatalog')}}">Catalog Application</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            {% if session.get('username') %}
+                  <li class="nav-item active">
+                    <a class="nav-link" href="{{url_for('userAccount')}}">My Account
+                      <span class="sr-only">(current)</span>
+                    </a>
+                  </li>
+                   <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('gdisconnect')}}">Logout</a>
+                  </li>
+            {% else %}
+                 <li class="nav-item">  
+                  <a class="nav-link" href="{{url_for('showLogin')}}">Login</a>
+                </li>
+            {% endif %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('showAbout')}}">About</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <div class="card my-4">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert-{{ category }} text-center">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+    </div> 
+
+      <!-- Content Row -->
+    <div class="row">
+ {% block content %}
+
+ {% endblock  %}
+  </div>
+      
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <footer class="py-3 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright © Catalog Application 2018</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+
+
+    <!-- Bootstrap core JavaScript -->
+  <!-- <script src="js/jquery.min.js.download"></script>
+    <script src="js/bootstrap.bundle.min.js.download"></script> -->
+
+</body></html>
