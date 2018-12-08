@@ -20,6 +20,9 @@ https://www.python.org/downloads/
 4- install Pillow package for image handling
 	pip install Pillow
 
+5- install oauth2client for google login
+You might need to install the above package.
+	pip3 install --upgrade oauth2client
 
 Database:
 ----------------------------
@@ -54,13 +57,14 @@ Once logged in, user can naviagte to below:
 
 Image Handling:
 -----------------------------
-Item details includes adding a picture which is saved in the database and the file system as well. The app generates a random name then it saves it to the item table and the file system. If an image is not provided while creating the item, a default image will be given. If the user updates the image for any item, the old image is automatically deleted from the file system. 
+Item details includes adding a picture which is saved in the database and the file system as well. The app generates a random name then it saves it to the item table and the file system. If an image is not provided while creating the item, a default image will be given. If the user updates the image for any item, the old image is automatically deleted from the file system.
 
 Deleting an item deletes its image from the file system after deleting the item as well.
 
 Securing the pages:
 ------------------------------
 To protect the items from unauthorized access, the app checks for user login and redirects the user to the login page if not authenticated.
+When the user attempts to delete or edit an item for which she is not authorized to do so, the app checks if the user id matches the user id of the item being maniplulated and if they don't macth the user is redrected back to the itm details page.
 
 
 JSON End points:
@@ -73,10 +77,10 @@ This will provide a json for the entire catalog, category wise
 /catalog/<string:category_name>/Category/JSON
 ex:
 /catalog/Soccer/Category/JSON
-This provides a json data for all items in a given category 
+This provides a json data for all items in a given category
 
 3- Specific Item
 /catalog/<string:catgeory_name>/<string:item_name>/item/JSON
-ex: 
+ex:
 /catalog/Soccer/Ball/item/JSON
 This provides a json data for a given item
