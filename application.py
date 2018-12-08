@@ -246,12 +246,12 @@ def catalogJSON():
                  'image': category.image,
                  'id': category.id,
             }
-            # list - will hold all comment dictionariess
+            # list - will hold all items
             item_json['items'] = []
             items = session.query(
                 CategoryItem).filter_by(
                 category_id=category.id, status='A').all()
-            # loop through idea comments
+            # loop through items
             for item in items:
                 item_dict = {
                     'id': item.id,
@@ -260,7 +260,7 @@ def catalogJSON():
                     'description': item.description,
                     'image': item.image
                 }
-                # ap
+
                 item_json['items'].append(item_dict)
             # insert idea dictionary into public_ideas list
                 catalog.append(item_json)
@@ -268,7 +268,7 @@ def catalogJSON():
                 data = {
                     'Category': catalog
                 }
-        # jsonify (imported from Flask above)
+        # jsonify 
         # will convert 'data' dictionary and
         # set mime type to 'application/json'
         return jsonify(data)
@@ -303,14 +303,17 @@ def showCatalog():
         'catalog.html', categories=categories, title='All Categories'
         )
 
+# generate a random name
+def getRandomName():
+    return ''.join(random.choice(string.ascii_uppercase + string.digits)
+                         for x in xrange(12))
+
 
 # function to generate a random image name based
 # on the python random method to avoid collesion
 # it saves the image to the file system
 def getFileName(file):
-    # generate a random name
-    randomname = ''.join(random.choice(string.ascii_uppercase + string.digits)
-                         for x in xrange(12))
+    randomname = getRandomName()
     ext = os.path.splitext(file.filename)[1]
     filename = secure_filename(randomname+ext)
     picture_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
@@ -323,12 +326,12 @@ def getFileName(file):
 
 
 # this a helper method to remove an image from the
-# file system in case the user update and item image
-# and the current image is not the default one
+# file system for when the user updates or deletes an item
 def removeFile(filename):
     image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     # check if a file exists on disk
     # if exists, delete it else show an error message
+
     if os.path.exists(image_path):
         try:
             os.remove(image_path)
@@ -427,8 +430,19 @@ def newItem(category_name):
 def editItem(category_name, item_title):
     if 'username' not in login_session:
         return redirect(url_for('showLogin'))
+
     editedItem = session.query(
         CategoryItem).filter_by(title=item_title, status='A').one()
+    if login_session.get('user_id') != editedItem.user_id:
+        flash('You are not authorized to perform this action',
+                          'danger')
+        return redirect(url_for(
+                    'itemDetails',
+                    category_name=category_name,
+                    item_title=editedItem.title
+                    )
+                )
+
     category = session.query(
         Category).filter_by(id=editedItem.category_id, status='A').one()
     categories = session.query(Category).filter_by(status='A').all()
@@ -455,10 +469,9 @@ def editItem(category_name, item_title):
         if 'file' in request.files:
             file = request.files['file']
             if allowed_file(request.files['file'].filename):
-                if editted_category.image != 'default.jpg':
+                if editedItem.image != 'default.jpg':
                     removeFile(editedItem.image)
                 filename = getFileName(file)
-                removeFile(editedItem.image)
                 editedItem.image = filename
             else:  # for cases when upload file is not an image
                 flash('Only images are welcome :)', 'danger')
@@ -496,11 +509,21 @@ def deleteItem(category_name, item_title):
         return redirect(url_for('showLogin'))
     item = session.query(CategoryItem).filter_by(
         title=item_title, status='A').one()
+    if login_session.get('user_id') != item.user_id:
+        flash('You are not authorized to perform this action',
+                          'danger')
+        return redirect(url_for(
+                                'itemDetails',
+                                category_name=category_name,
+                                item_title=item.title
+                                )
+                        )
     if request.method == 'POST':
         item_to_delte = session.query(CategoryItem).filter_by(
             title=item_title, status='A').one()
-        item_to_delte.status = 'X'
-        session.add(item_to_delte)
+        if item_to_delte.image != 'default.jpg':
+            removeFile(item_to_delte.image)
+        session.delete(item_to_delte)
         session.commit()
         flash('Item was deleted successfully.', 'success')
         return redirect(url_for('showItems', category_name=category_name))

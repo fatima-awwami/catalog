@@ -31,7 +31,7 @@ Please run below in the terminal:
 
 Running the application
 ----------------------------
-to run the program, navigate to the folder then run the following command in the terminal.
+to run the program, clone the entire project folder then navigate to the folder then run the following command in the terminal.
 
 Python application.py
 
@@ -49,22 +49,18 @@ Once logged in, user can naviagte to below:
    She can add item to any category
 
 3- In the item details page:
- delete and edit buttons are active if the user is logged in and she is the creator for that item. The same buttons will deactivated otherwise.
-
-Deleteing an Item:
------------------------------
- 	each item has a status field in the database. This field either A for active items or X for non active ones. This means when the user delets an item it becomes inactive in the database (status = 'X') but the record is not deleted for the same. The same will not be displayed to the user in the app front end.
+ delete and edit buttons are active if the user is logged in and she is the creator for that item. The same buttons will be deactivated otherwise.
 
 
 Image Handling:
 -----------------------------
 Item details includes adding a picture which is saved in the database and the file system as well. The app generates a random name then it saves it to the item table and the file system. If an image is not provided while creating the item, a default image will be given. If the user updates the image for any item, the old image is automatically deleted from the file system. 
 
-Deleting an item dosn't delete its image from the file system since the record only gets deactivated.
+Deleting an item deletes its image from the file system after deleting the item as well.
 
 Securing the pages:
 ------------------------------
-To protect the items from unauthorized access, the app checks for user login and redirects the user to the login page if authenticated.
+To protect the items from unauthorized access, the app checks for user login and redirects the user to the login page if not authenticated.
 
 
 JSON End points:
