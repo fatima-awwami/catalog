@@ -544,7 +544,7 @@ def itemDetails(category_name, item_title):
     category = session.query(Category).filter_by(
         id=item.category_id, status='A').one()
     return render_template(
-        'itemDetails.html',
+        'itemdetails.html',
         item=item,
         category_name=category.name,
         title='Item Details')
