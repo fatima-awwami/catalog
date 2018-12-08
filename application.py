@@ -268,7 +268,7 @@ def catalogJSON():
                 data = {
                     'Category': catalog
                 }
-        # jsonify 
+        # jsonify
         # will convert 'data' dictionary and
         # set mime type to 'application/json'
         return jsonify(data)
@@ -303,10 +303,11 @@ def showCatalog():
         'catalog.html', categories=categories, title='All Categories'
         )
 
+
 # generate a random name
 def getRandomName():
     return ''.join(random.choice(string.ascii_uppercase + string.digits)
-                         for x in xrange(12))
+                   for x in xrange(12))
 
 
 # function to generate a random image name based
@@ -435,7 +436,7 @@ def editItem(category_name, item_title):
         CategoryItem).filter_by(title=item_title, status='A').one()
     if login_session.get('user_id') != editedItem.user_id:
         flash('You are not authorized to perform this action',
-                          'danger')
+              'danger')
         return redirect(url_for(
                     'itemDetails',
                     category_name=category_name,
@@ -511,7 +512,7 @@ def deleteItem(category_name, item_title):
         title=item_title, status='A').one()
     if login_session.get('user_id') != item.user_id:
         flash('You are not authorized to perform this action',
-                          'danger')
+              'danger')
         return redirect(url_for(
                                 'itemDetails',
                                 category_name=category_name,
